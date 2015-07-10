@@ -10,7 +10,7 @@ All variables start with `NAGIOS`, most of fields are self-explaining
 
 [states](states.md) are standard nagios state
 
-### Host/service/event specific
+### Event/service-specific
 
 * **NAGIOS_ARG1** to  * **NAGIOS_ARG32** - unused in notofication
 * **NAGIOS_CONTACTADDRESS0** to * **NAGIOS_CONTACTADDRESS5** - unused
@@ -135,6 +135,16 @@ All variables start with `NAGIOS`, most of fields are self-explaining
 * **NAGIOS_TIME** - `17:24:33`,
 * **NAGIOS_TIMET** - `1436455473`,
 
+### Host-specific
+* **NAGIOS_TOTALHOSTPROBLEMS** - `0`,
+* **NAGIOS_TOTALHOSTPROBLEMSUNHANDLED** - `0`,
+* **NAGIOS_TOTALHOSTSERVICES** - `2`,
+* **NAGIOS_TOTALHOSTSERVICESCRITICAL** - `0`,
+* **NAGIOS_TOTALHOSTSERVICESOK** - `1`,
+* **NAGIOS_TOTALHOSTSERVICESUNKNOWN** - `1`,
+* **NAGIOS_TOTALHOSTSERVICESWARNING** - `0`,
+
+
 ### Generic info
 
 * **NAGIOS_ADMINEMAIL** - **nagios**,
@@ -148,15 +158,8 @@ All variables start with `NAGIOS`, most of fields are self-explaining
 * **NAGIOS_RETENTIONDATAFILE** - `/var/log/nagios/retention.dat`,
 * **NAGIOS_TEMPFILE** - `/var/log/nagios/nagios.tmp`,
 * **NAGIOS_TEMPPATH**
-* **NAGIOS_TOTALHOSTPROBLEMS** - `0`,
-* **NAGIOS_TOTALHOSTPROBLEMSUNHANDLED** - `0`,
 * **NAGIOS_TOTALHOSTSDOWN** - `0`,
 * **NAGIOS_TOTALHOSTSDOWNUNHANDLED** - `0`,
-* **NAGIOS_TOTALHOSTSERVICES** - `2`,
-* **NAGIOS_TOTALHOSTSERVICESCRITICAL** - `0`,
-* **NAGIOS_TOTALHOSTSERVICESOK** - `1`,
-* **NAGIOS_TOTALHOSTSERVICESUNKNOWN** - `1`,
-* **NAGIOS_TOTALHOSTSERVICESWARNING** - `0`,
 * **NAGIOS_TOTALHOSTSUNREACHABLE** - `0`,
 * **NAGIOS_TOTALHOSTSUNREACHABLEUNHANDLED** - `0`,
 * **NAGIOS_TOTALHOSTSUP** - `97`,
