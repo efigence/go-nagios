@@ -2,7 +2,6 @@
 package nagios
 
 import (
-	"log"
 	"os"
 	"strings"
 	"errors"
