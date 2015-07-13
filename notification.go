@@ -11,15 +11,16 @@ type Notification struct {
 
 func NewNotification() Notification {
 	var n Notification
-	n.Host = NewHostFromEnv()
-	n.Service = NewServiceFromEnv()
+	n.Host = NewHost()
+	n.Service = NewService()
 	return n
 }
 
 
 func NewNotificationFromEnv() Notification {
-	var n Notification
-	n.Host = NewHostFromEnv()
-	n.Service = NewServiceFromEnv()
+    n := NewNotification()
+	// FIXME handle error
+	n.Host, _ = NewHostFromEnv()
+	n.Service, _ = NewServiceFromEnv()
 	return n
 }

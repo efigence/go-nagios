@@ -1,28 +1,50 @@
 /* Service definition */
 package nagios
 
+import (
+	"log"
+	"os"
+	"strings"
+	"errors"
+)
+
+
 type Service struct {
 	Hostname string
-	HostGroups map[string]string
 	Description string
 	DisplayName string
-	ServiceGroups map[string]string // list of service groups this service belongs to
+	ServiceGroups []string // list of service groups this service belongs to
 	Volatile bool
-	Contacts map[string]string // list of service contacts
-	ContactGroups map[string]string // list of service contact groups
+	Contacts []string // list of service contacts
+	ContactGroups []string // list of service contact groups
 }
 
 
 func NewService() Service {
 	var s Service
-	s.HostGroups = make(map[string]string)
-	s.ServiceGroups = make(map[string]string)
-	s.Contacts = make(map[string]string)
-	s.ContactGroups = make(map[string]string)
 	return s
 }
 
-func NewServiceFromEnv() Service {
+func NewServiceFromEnv() (Service, error) {
 	s := NewService()
-	return s
+	s.Hostname = os.Getenv("NAGIOS_HOSTNAME")
+	s.Description = os.Getenv("NAGIOS_SERVICEDESC")
+	s.DisplayName = os.Getenv("NAGIOS_SERVICEDISPLAYNAME")
+	if (os.Getenv("NAGIOS_SERVICEISVOLATILE") == "1") {
+		s.Volatile = true
+	} else {
+		s.Volatile = false // nagios default for service
+	}
+	if(os.Getenv("NAGIOS_SERVICEGROUPNAMES") != "") {
+		s.ServiceGroups = strings.Split( os.Getenv("NAGIOS_SERVICEGROUPNAMES"), ",")
+	}
+	if (s.Hostname == "") {
+		err := errors.New("Couldn't get service hostname from env")
+		return s, err
+	}
+	if (s.Description == "") {
+		err := errors.New("Couldn't get service description from env")
+		return s, err
+	}
+	return s, nil
 }
