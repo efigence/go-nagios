@@ -21,3 +21,8 @@ func NewService() Service {
 	s.ContactGroups = make(map[string]string)
 	return s
 }
+
+func NewServiceFromEnv() Service {
+	s := NewService()
+	return s
+}
