@@ -6,14 +6,10 @@ import (
 )
 
 func TestMain(t *testing.T) {
-	os.Setenv("NAGIOS_HOSTNAME","testhost")
-	os.Setenv("NAGIOS_HOSTADDRESS","127.0.0.1")
-	os.Setenv("NAGIOS_HOSTDISPLAYNAME","long-test-host")
-	os.Setenv("NAGIOS_HOSTGROUPNAMES","svcgroup1,svcgroup2")
 }
 
 func TestHostBadEnv(t *testing.T) {
-//	os.Clearenv()
+	os.Clearenv()
 	_, err := NewHostFromEnv()
 	if err == nil {
 		t.Logf("%s", err)
@@ -22,7 +18,10 @@ func TestHostBadEnv(t *testing.T) {
 
 }
 func TestHostFromEnv(t *testing.T) {
-
+	os.Setenv("NAGIOS_HOSTNAME","testhost")
+	os.Setenv("NAGIOS_HOSTADDRESS","127.0.0.1")
+	os.Setenv("NAGIOS_HOSTDISPLAYNAME","long-test-host")
+	os.Setenv("NAGIOS_HOSTGROUPNAMES","hostgroup2,hostgroup1")
 	host, err := NewHostFromEnv()
 	if err != nil {
 		t.Logf("%s", err)
