@@ -5,12 +5,9 @@ import (
 	"os"
 )
 
+
 func TestService(t *testing.T) {
-	os.Setenv("NAGIOS_HOSTNAME","testhost")
-	os.Setenv("NAGIOS_SERVICEDESC","test-service")
-	os.Setenv("NAGIOS_SERVICEDISPLAYNAME","test-service-name")
-	os.Setenv("NAGIOS_SERVICEGROUPNAMES","svcgroup1,svcgroup2")
-	os.Setenv("NAGIOS_SERVICEISVOLATILE","0")
+	basicEnv()
 	service, err := NewServiceFromEnv()
 	if err != nil {
 		t.Logf("%s", err)
@@ -21,9 +18,21 @@ func TestService(t *testing.T) {
 	}
 }
 
+func TestServiceNoDesc(t *testing.T) {
+	basicEnv()
+	os.Unsetenv("NAGIOS_SERVICEDESC")
+	_, err := NewServiceFromEnv()
+	if err == nil {
+		t.Logf("%s", err)
+		t.FailNow()
+	}
+
+}
+
 
 func TestFailIfBadEnv(t *testing.T) {
 	os.Clearenv()
+	os.Setenv("NAGIOS_SERVICEISVOLATILE","1")
 	service, err := NewServiceFromEnv()
 	if err == nil {
 		t.Log("Should fail if env is empty")

@@ -17,10 +17,11 @@ func NewNotification() Notification {
 }
 
 
-func NewNotificationFromEnv() Notification {
+func NewNotificationFromEnv() (Notification, error) {
     n := NewNotification()
 	// FIXME handle error
-	n.Host, _ = NewHostFromEnv()
-	n.Service, _ = NewServiceFromEnv()
-	return n
+	var err error
+	n.Host, err = NewHostFromEnv()
+	n.Service, err = NewServiceFromEnv()
+	return n, err
 }
