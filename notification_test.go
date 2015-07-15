@@ -16,10 +16,7 @@ func TestNotificationBadEnv(t *testing.T) {
 }
 
 func TestNotification(t *testing.T) {
-	os.Setenv("NAGIOS_HOSTNAME","testhost")
-	os.Setenv("NAGIOS_SERVICEDESC","test-service")
-	os.Setenv("NAGIOS_HOSTADDRESS","127.0.0.1")
-	os.Setenv("NAGIOS_HOSTDISPLAYNAME","long-test-host")
+	basicEnv()
 	n, err := NewNotificationFromEnv()
 	if err != nil {
 		t.Logf("%s", err)
