@@ -1,10 +1,9 @@
 package nagios
 
 import (
-	"testing"
 	"os"
+	"testing"
 )
-
 
 func TestService(t *testing.T) {
 	basicEnv()
@@ -13,7 +12,7 @@ func TestService(t *testing.T) {
 		t.Logf("%s", err)
 		t.FailNow()
 	}
-	if(service.Hostname == "") {
+	if service.Hostname == "" {
 		t.Error("Empty host")
 	}
 }
@@ -29,10 +28,9 @@ func TestServiceNoDesc(t *testing.T) {
 
 }
 
-
 func TestFailIfBadEnv(t *testing.T) {
 	os.Clearenv()
-	os.Setenv("NAGIOS_SERVICEISVOLATILE","1")
+	os.Setenv("NAGIOS_SERVICEISVOLATILE", "1")
 	service, err := NewServiceFromEnv()
 	if err == nil {
 		t.Log("Should fail if env is empty")
@@ -40,7 +38,6 @@ func TestFailIfBadEnv(t *testing.T) {
 	}
 	_ = service
 }
-
 
 func BenchmarkServiceFromEnv(b *testing.B) {
 	basicEnv()

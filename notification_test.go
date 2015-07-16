@@ -1,10 +1,9 @@
 package nagios
 
 import (
-	"testing"
 	"os"
+	"testing"
 )
-
 
 func TestNotificationBadEnv(t *testing.T) {
 	os.Clearenv()
@@ -28,8 +27,8 @@ func TestNotification(t *testing.T) {
 
 func TestNotificationSoft(t *testing.T) {
 	basicEnv()
-	os.Setenv("NAGIOS_HOSTSTATETYPE","SOFT")
-	os.Setenv("NAGIOS_SERVICESTATETYPE","SOFT")
+	os.Setenv("NAGIOS_HOSTSTATETYPE", "SOFT")
+	os.Setenv("NAGIOS_SERVICESTATETYPE", "SOFT")
 	n, err := NewNotificationFromEnv()
 	if err != nil {
 		t.Logf("%s", err)
@@ -43,7 +42,7 @@ func TestNotificationSoft(t *testing.T) {
 	}
 }
 
-func  TestNotificationHost(t *testing.T) {
+func TestNotificationHost(t *testing.T) {
 	basicEnv()
 	os.Unsetenv("NAGIOS_SERVICESTATE")
 	n := testNotification(t)
@@ -58,7 +57,7 @@ func  TestNotificationHost(t *testing.T) {
 
 func TestBadTime(t *testing.T) {
 	basicEnv()
-    os.Setenv("NAGIOS_SERVICEDURATIONSEC","kitten")
+	os.Setenv("NAGIOS_SERVICEDURATIONSEC", "kitten")
 	n, err := NewNotificationFromEnv()
 	if err == nil {
 		t.Logf("Should detect bad time")
@@ -67,7 +66,7 @@ func TestBadTime(t *testing.T) {
 	_ = n
 }
 
-func testNotification(t *testing.T)  Notification {
+func testNotification(t *testing.T) Notification {
 	n, err := NewNotificationFromEnv()
 	if err != nil {
 		t.Logf("%s", err)
