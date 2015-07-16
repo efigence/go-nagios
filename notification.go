@@ -15,18 +15,18 @@ import (
 //
 // *
 type Notification struct {
-	Host                 Host
-	Service              Service
+	Host                 Host          `json:"hostname"`
+	Service              Service       `json:"service,omitempty"`
 	Type                 string        `json:"type"`
 	Recipients           []string      `json:"recipients,omitempty"`
 	HostState            string        `json:"host_state"`
 	HostStateHard        bool          `json:"host_state_hard"`
-	HostStateDuration    time.Duration `json:"host_state_duration,omitempty"`
+	HostStateDuration    time.Duration `json:"host_state_duration"`
 	ServiceState         string        `json:"service_state,omitempty"`
 	ServiceStateHard     bool          `json:"sevice_state_hard,omitempty"`
 	ServiceStateDuration time.Duration `json:"service_state_duration,omitempty"`
-	IsHost               bool          `json:"is_host"`
-	IsService            bool          `json:"is_service"`
+	IsHost               bool          `json:"is_host,omitempty"`
+	IsService            bool          `json:"is_service,omitempty"`
 }
 
 func NewNotification() Notification {
