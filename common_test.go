@@ -2,6 +2,7 @@ package nagios
 
 import (
 	"os"
+	"testing"
 )
 
 func basicEnv () {
@@ -17,4 +18,18 @@ func basicEnv () {
 	os.Setenv("NAGIOS_SERVICEISVOLATILE","0")
 	os.Setenv("NAGIOS_SERVICEDURATION","0d 0h 5m 0s")
     os.Setenv("NAGIOS_SERVICEDURATIONSEC","300")
+
+}
+
+
+func BenchmarkSetenv(b *testing.B) {
+	for i := 0; i < b.N; i++ {
+		os.Setenv("NAGIOS_SERVICEDURATIONSEC","300")
+	}
+}
+
+func BenchmarkGetenv(b *testing.B) {
+	for i := 0; i < b.N; i++ {
+		_ = os.Getenv("NAGIOS_SERVICEDURATIONSEC")
+	}
 }

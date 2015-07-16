@@ -5,6 +5,7 @@ import (
 	"os"
 )
 
+
 func TestNotificationBadEnv(t *testing.T) {
 	os.Clearenv()
 	n, err := NewNotificationFromEnv()
@@ -73,4 +74,18 @@ func testNotification(t *testing.T)  Notification {
 		t.FailNow()
 	}
 	return n
+}
+
+func BenchmarkNotificationFromEnv(b *testing.B) {
+	basicEnv()
+	b.ResetTimer()
+	for i := 0; i < b.N; i++ {
+		_, _ = NewNotificationFromEnv()
+	}
+}
+
+func BenchmarkNotification(b *testing.B) {
+	for i := 0; i < b.N; i++ {
+		_ = NewNotification()
+	}
 }

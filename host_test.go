@@ -31,3 +31,19 @@ func TestHostFromEnv(t *testing.T) {
 		t.Error("Empty host")
 	}
 }
+
+func BenchmarkHostFromEnv(b *testing.B) {
+	basicEnv()
+	b.ResetTimer()
+	for i := 0; i < b.N; i++ {
+		_, _ = NewHostFromEnv()
+	}
+}
+
+func BenchmarkHost(b *testing.B) {
+	basicEnv()
+	b.ResetTimer()
+	for i := 0; i < b.N; i++ {
+		_= NewHost()
+	}
+}

@@ -33,8 +33,6 @@ func NewNotification() Notification {
 	var n Notification
 	n.Host = NewHost()
 	n.Service = NewService()
-//	n.ServiceStateHard = false
-
 	return n
 }
 

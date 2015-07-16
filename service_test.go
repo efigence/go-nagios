@@ -40,3 +40,17 @@ func TestFailIfBadEnv(t *testing.T) {
 	}
 	_ = service
 }
+
+
+func BenchmarkServiceFromEnv(b *testing.B) {
+	basicEnv()
+	b.ResetTimer()
+	for i := 0; i < b.N; i++ {
+		_, _ = NewServiceFromEnv()
+	}
+}
+func BenchmarkService(b *testing.B) {
+	for i := 0; i < b.N; i++ {
+		_ = NewService()
+	}
+}
