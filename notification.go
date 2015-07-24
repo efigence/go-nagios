@@ -36,6 +36,8 @@ func NewNotification() Notification {
 	return n
 }
 
+// Create notification from env passed by nagios
+// Intended to be used with nagios notification command
 func NewNotificationFromEnv() (Notification, error) {
 	n := NewNotification()
 	// FIXME handle error

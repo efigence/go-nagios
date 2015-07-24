@@ -21,7 +21,7 @@ func NewService() Service {
 	var s Service
 	return s
 }
-
+// create service from nagios env variables
 func NewServiceFromEnv() (Service, error) {
 	s := NewService()
 	s.Hostname = os.Getenv("NAGIOS_HOSTNAME")

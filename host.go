@@ -20,6 +20,8 @@ func NewHost() Host {
 	return h
 }
 
+
+// Create host object from nagios env variables
 func NewHostFromEnv() (Host, error) {
 	h := NewHost()
 	h.Hostname = os.Getenv("NAGIOS_HOSTNAME")
