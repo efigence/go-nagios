@@ -3,9 +3,11 @@
 *.a
 *.so
 
-# Folders
-_obj
-_test
+# various output files
+*.out
+cover-cobertura.xml
+cover.json
+report.xml
 
 # Architecture specific extensions/prefixes
 *.[568vq]
