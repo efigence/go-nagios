@@ -1,8 +1,10 @@
 package nagios
 
 import (
+	. "github.com/smartystreets/goconvey/convey"
 	"os"
 	"testing"
+	"time"
 )
 
 func TestMain(t *testing.T) {
@@ -30,6 +32,36 @@ func TestHostFromEnv(t *testing.T) {
 	if host.Hostname == "" {
 		t.Error("Empty host")
 	}
+}
+
+func TestHostFromMap(t *testing.T) {
+	m := map[string]string{
+		"host_name":                     "testhost",
+		"current_state":                 "1",
+		"last_hard_state":               "0",
+		"last_hard_state_change":        "1444749354",
+		"last_state_change":             "1444749403",
+		"last_check":                    "1444749433",
+		"next_check":                    "1444749503",
+		"scheduled_downtime_depth":      "1",
+		"problem_has_been_acknowledged": "0",
+		"is_flapping":                   "1",
+		"plugin_output":                 "DUMMY CHECK WARNING",
+	}
+	tested, err := NewHostFromMap(m)
+	Convey("HostFromMap", t, func() {
+		So(err, ShouldEqual, nil)
+		So(tested.Hostname, ShouldEqual, m["host_name"])
+		So(tested.State, ShouldEqual, "WARNING")
+		So(tested.PreviousState, ShouldEqual, "OK")
+		So(tested.CheckMessage, ShouldEqual, "DUMMY CHECK WARNING")
+		So(tested.LastCheck, ShouldResemble, time.Unix(1444749433, 0))
+		So(tested.NextCheck, ShouldResemble, time.Unix(1444749503, 0))
+		So(tested.LastStateChange, ShouldResemble, time.Unix(1444749403, 0))
+		So(tested.LastHardStateChange, ShouldResemble, time.Unix(1444749354, 0))
+		So(tested.Acknowledged, ShouldEqual, false)
+		So(tested.Flapping, ShouldEqual, true)
+	})
 }
 
 func BenchmarkHostFromEnv(b *testing.B) {

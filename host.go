@@ -8,11 +8,10 @@ import (
 )
 
 type Host struct {
-	Hostname    string   `json:"hostname"`
-	Displayname string   `json:"display_name"`
-	HostGroups  []string `json:"hostgroups"`
-	Address     string   `json:"address"`
-	Parents     *[]Host  `json:"parents"`
+	CommonFields
+	HostGroups []string `json:"hostgroups"`
+	Address    string   `json:"address"`
+	Parents    *[]Host  `json:"parents"`
 }
 
 func NewHost() Host {
@@ -20,12 +19,11 @@ func NewHost() Host {
 	return h
 }
 
-
 // Create host object from nagios env variables
 func NewHostFromEnv() (Host, error) {
 	h := NewHost()
 	h.Hostname = os.Getenv("NAGIOS_HOSTNAME")
-	h.Displayname = os.Getenv("NAGIOS_HOSTDISPLAYNAME")
+	h.DisplayName = os.Getenv("NAGIOS_HOSTDISPLAYNAME")
 	h.Address = os.Getenv("NAGIOS_HOSTADDRESS")
 	if os.Getenv("NAGIOS_HOSTGROUPNAMES") != "" {
 		h.HostGroups = strings.Split(os.Getenv("NAGIOS_HOSTGROUPNAMES"), ",")
@@ -35,4 +33,11 @@ func NewHostFromEnv() (Host, error) {
 		return h, err
 	}
 	return h, nil
+}
+
+func NewHostFromMap(m map[string]string) (Host, error) {
+	h := NewHost()
+	var err error
+	h.UpdateCommonFromMap(m)
+	return h, err
 }

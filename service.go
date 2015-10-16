@@ -4,13 +4,14 @@ package nagios
 import (
 	"errors"
 	"os"
+	//	"strconv"
 	"strings"
+	//	"time"
 )
 
 type Service struct {
-	Hostname      string   `json:"hostname,omitempty"`
+	CommonFields
 	Description   string   `json:"description,omitempty"`
-	DisplayName   string   `json:"display_name,omitempty"`
 	ServiceGroups []string `json:"servicegroups,omitempty"` // list of service groups this service belongs to
 	Volatile      bool     `json:"volatile,omitempty"`
 	Contacts      []string `json:"contacts,omitempty"`      // list of service contacts
@@ -21,6 +22,7 @@ func NewService() Service {
 	var s Service
 	return s
 }
+
 // create service from nagios env variables
 func NewServiceFromEnv() (Service, error) {
 	s := NewService()
@@ -44,4 +46,17 @@ func NewServiceFromEnv() (Service, error) {
 		return s, err
 	}
 	return s, nil
+}
+
+// Generate service data from key/value pairs in "status.dat" format
+func NewServiceFromMap(m map[string]string) (Service, error) {
+	//	s := NewService()
+	var s Service
+	var err error
+	err = s.UpdateCommonFromMap(m)
+	if err != nil {
+		return s, err
+	}
+	s.Description = m["service_description"]
+	return s, err
 }

@@ -1,3 +1,16 @@
+
+
+# editor temp files
+*~
+.*.sw?
+.sw?
+.\#*
+\#*\#
+DEADJOE
+# compiled files
+_vendor/
+*\.test
+
 # Compiled Object files, Static and Dynamic libs (Shared Objects)
 *.o
 *.a
@@ -25,3 +38,8 @@ _testmain.go
 *.test
 *.prof
 *.out
+
+# local test data
+
+t-data/*local
+
