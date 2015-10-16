@@ -6,6 +6,7 @@ import (
 	"bufio"
 	"io"
 	"regexp"
+	"sync"
 )
 
 var blockStartRegex = regexp.MustCompile(`^(contactstatus|hoststatus|info|programstatus|servicecomment|servicestatus)\s\{`)
@@ -13,8 +14,9 @@ var blockEndRegex = regexp.MustCompile(`^\s}$`)
 var kvRegex = regexp.MustCompile(`^\s*(\S+?)=(.*)$`)
 
 type Status struct {
-	Host    map[string]Host `json:"host,omitempty"`
+	Host    map[string]Host               `json:"host,omitempty"`
 	Service map[string]map[string]Service `json:"service,omitempty"`
+	sync.RWMutex
 }
 
 func LoadStatus(r io.Reader) Status {
@@ -62,4 +64,12 @@ func LoadStatus(r io.Reader) Status {
 	}
 	_ = block_type
 	return status
+}
+
+func (s *Status)UpdateStatus(r io.Reader) {
+	status := LoadStatus(r);
+	s.Lock()
+	s.Host = status.Host
+	s.Service = status.Service
+	s.Unlock()
 }
