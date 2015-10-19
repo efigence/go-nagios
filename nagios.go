@@ -35,7 +35,7 @@ type CommonFields struct {
 	LastCheck           time.Time `json:"last_check,omitempty"`
 	NextCheck           time.Time `json:"next_check,omitempty"`
 	LastHardStateChange time.Time `json:"last_hard_state_change,omitempty"`
-	LastStateChange     time.Time `json:"last_hard_state_change,omitempty"`
+	LastStateChange     time.Time `json:"last_state_change,omitempty"`
 	StateHard           bool      `json:"service_state_hard,omitempty"`
 	Acknowledged        bool      `json:"ack,omitempty"`
 	Flapping            bool      `json:"flapping,omitempty"`
