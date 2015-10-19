@@ -30,13 +30,13 @@ type CommonFields struct {
 	Hostname            string    `json:"hostname,omitempty"`
 	DisplayName         string    `json:"display_name,omitempty"`
 	CheckMessage        string    `json:"check_message,omitempty"`
-	State               string    `json:"service_state,omitempty"`
-	PreviousState       string    `json:"previous_service_state,omitempty"`
+	State               string    `json:"state,omitempty"`
+	PreviousState       string    `json:"previous_state,omitempty"`
 	LastCheck           time.Time `json:"last_check,omitempty"`
 	NextCheck           time.Time `json:"next_check,omitempty"`
 	LastHardStateChange time.Time `json:"last_hard_state_change,omitempty"`
 	LastStateChange     time.Time `json:"last_state_change,omitempty"`
-	StateHard           bool      `json:"service_state_hard"`
+	StateHard           bool      `json:"state_hard"`
 	Acknowledged        bool      `json:"ack"`
 	Flapping            bool      `json:"flapping"`
 	Downtime            bool      `json:"downtime"`
