@@ -36,10 +36,10 @@ type CommonFields struct {
 	NextCheck           time.Time `json:"next_check,omitempty"`
 	LastHardStateChange time.Time `json:"last_hard_state_change,omitempty"`
 	LastStateChange     time.Time `json:"last_state_change,omitempty"`
-	StateHard           bool      `json:"service_state_hard,omitempty"`
-	Acknowledged        bool      `json:"ack,omitempty"`
-	Flapping            bool      `json:"flapping,omitempty"`
-	Downtime            bool      `json:"downtime,omitempty"`
+	StateHard           bool      `json:"service_state_hard"`
+	Acknowledged        bool      `json:"ack"`
+	Flapping            bool      `json:"flapping"`
+	Downtime            bool      `json:"downtime"`
 }
 
 func (c *CommonFields) UpdateCommonFromMap(m map[string]string) error {
