@@ -73,6 +73,16 @@ func (c *CommonFields) UpdateCommonFromMap(m map[string]string) error {
 	}
 	c.NextCheck = time.Unix(i, 0)
 
+	i, err = strconv.ParseInt(m["state_type"], 10, 64)
+	if err != nil {
+		return err
+	}
+	if i > 0 {
+		c.StateHard = true
+	} else {
+		c.StateHard = false
+	}
+
 	i, err = strconv.ParseInt(m["scheduled_downtime_depth"], 10, 64)
 	if err != nil {
 		return err

@@ -52,6 +52,7 @@ func TestServiceFromMap(t *testing.T) {
 		"last_check":                    "1444749433",
 		"next_check":                    "1444749503",
 		"scheduled_downtime_depth":      "0",
+		"state_type":                    "1",
 		"problem_has_been_acknowledged": "1",
 		"is_flapping":                   "0",
 		"plugin_output":                 "DUMMY CHECK WARNING",
@@ -62,6 +63,7 @@ func TestServiceFromMap(t *testing.T) {
 		So(tested.Hostname, ShouldEqual, m["host_name"])
 		So(tested.Description, ShouldEqual, m["service_description"])
 		So(tested.State, ShouldEqual, "WARNING")
+		So(tested.StateHard, ShouldEqual, true)
 		So(tested.PreviousState, ShouldEqual, "OK")
 		So(tested.LastCheck, ShouldResemble, time.Unix(1444749433, 0))
 		So(tested.NextCheck, ShouldResemble, time.Unix(1444749503, 0))
