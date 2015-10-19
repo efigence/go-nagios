@@ -19,9 +19,10 @@ type Status struct {
 	sync.RWMutex
 }
 
-func LoadStatus(r io.Reader) Status {
-	scanner := bufio.NewScanner(r)
+func LoadStatus(r io.Reader) (Status, error) {
 	var status Status
+	var err error
+	scanner := bufio.NewScanner(r)
 	status.Host = make(map[string]Host)
 	status.Service = make(map[string]map[string]Service)
 	block_type := ""
@@ -47,12 +48,16 @@ func LoadStatus(r io.Reader) Status {
 					}
 					status.Service[s.Hostname][s.Description] = s
 
+				} else {
+					return status, err
 				}
 
 			} else if block_type == "hoststatus" {
 				h, err := NewHostFromMap(block_content)
 				if err == nil {
 					status.Host[h.Hostname] = h
+				} else {
+					return status, err
 				}
 
 			}
@@ -63,13 +68,14 @@ func LoadStatus(r io.Reader) Status {
 		}
 	}
 	_ = block_type
-	return status
+	return status, err
 }
 
-func (s *Status)UpdateStatus(r io.Reader) {
-	status := LoadStatus(r);
+func (s *Status)UpdateStatus(r io.Reader) error {
+	status, err := LoadStatus(r);
 	s.Lock()
 	s.Host = status.Host
 	s.Service = status.Service
 	s.Unlock()
+	return err
 }

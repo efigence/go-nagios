@@ -8,7 +8,7 @@ import (
 )
 
 func TestStatus(t *testing.T) {
-	file, err := os.Open("t-data/status.local.dat")
+	file, err := os.Open("t-data/status.dat.local")
 	if err != nil {
 		file, err = os.Open("t-data/status.dat")
 		if err != nil {
@@ -17,9 +17,10 @@ func TestStatus(t *testing.T) {
 		}
 	}
 	Convey("Load status.dat", t, func() {
-		s := LoadStatus(file)
-		_ = s
-		Convey("Nonzero amount of host and services", func() {
+		s, err := LoadStatus(file)
+		_ = err
+		Convey("Parsing", func() {
+			So(err, ShouldEqual, nil)
 			So(len(s.Host), ShouldNotEqual, 0)
 			So(len(s.Service), ShouldNotEqual, 0)
 		})
