@@ -24,9 +24,10 @@ func TestSummary(t *testing.T) {
 		})
 		Convey("service stats",func() {
 			So(s.Summary.ServiceCount.All, ShouldEqual, 7)
-			So(s.Summary.ServiceCount.Ok, ShouldEqual, 7)
-			So(s.Summary.ServiceCount.Warning, ShouldEqual, 7)
-			So(s.Summary.ServiceCount.Critical, ShouldEqual, 7)
+			So(s.Summary.ServiceCount.Ok, ShouldEqual, 4)
+			So(s.Summary.ServiceCount.Warning, ShouldEqual, 1)
+			So(s.Summary.ServiceCount.Critical, ShouldEqual, 1)
+			So(s.Summary.ServiceCount.Unknown, ShouldEqual, 1)
 		})
 	})
 

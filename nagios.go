@@ -6,7 +6,7 @@ import (
 	//	"os"
 )
 
-const StateOK = "OK"
+const StateOk = "OK"
 const StateWarning = "WARNING"
 const StateCritical = "CRITICAL"
 const StateUnknown = "UNKNOWN"
@@ -16,7 +16,7 @@ const StateDown = "DOWN"
 const StateUnreachable = "UNREACHABLE"
 
 var serviceStateMapNumToName = map[string]string{
-	"0": StateOK,
+	"0": StateOk,
 	"1": StateWarning,
 	"2": StateCritical,
 	"3": StateUnknown,
@@ -34,7 +34,7 @@ var hostStateMapNameToNum = map[string]string{
 	StateUnreachable: "2",
 }
 var serviceStateMapNameToNum = map[string]string{
-	StateOK:       "0",
+	StateOk:       "0",
 	StateWarning:  "1",
 	StateCritical: "2",
 	StateUnknown:  "3",
