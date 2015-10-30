@@ -78,6 +78,7 @@ func (s *Status) UpdateStatus(r io.Reader) error {
 	s.Lock()
 	s.Host = status.Host
 	s.Service = status.Service
+	s.Summary = status.Summary
 	s.Unlock()
 	return err
 }
