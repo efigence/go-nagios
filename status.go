@@ -16,6 +16,7 @@ var kvRegex = regexp.MustCompile(`^\s*(\S+?)=(.*)$`)
 type Status struct {
 	Host    map[string]Host               `json:"host,omitempty"`
 	Service map[string]map[string]Service `json:"service,omitempty"`
+	Summary Summary `json:"summary,omitempty"`
 	sync.RWMutex
 }
 
@@ -67,7 +68,8 @@ func LoadStatus(r io.Reader) (Status, error) {
 			continue
 		}
 	}
-	_ = block_type
+	status.Summary.UpdateHost(status.Host)
+	status.Summary.UpdateService(status.Service)
 	return status, err
 }
 

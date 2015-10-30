@@ -53,7 +53,7 @@ func NewServiceFromMap(m map[string]string) (Service, error) {
 	//	s := NewService()
 	var s Service
 	var err error
-	err = s.UpdateCommonFromMap(m)
+	err = s.UpdateCommonFromMap(m,isService)
 	if err != nil {
 		return s, err
 	}

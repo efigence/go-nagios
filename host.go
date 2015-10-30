@@ -38,6 +38,6 @@ func NewHostFromEnv() (Host, error) {
 func NewHostFromMap(m map[string]string) (Host, error) {
 	h := NewHost()
 	var err error
-	h.UpdateCommonFromMap(m)
+	h.UpdateCommonFromMap(m,isHost)
 	return h, err
 }

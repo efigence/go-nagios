@@ -11,19 +11,36 @@ const StateWarning = "WARNING"
 const StateCritical = "CRITICAL"
 const StateUnknown = "UNKNOWN"
 
-var stateMapNumToName = map[string]string{
+const StateUp = "UP"
+const StateDown = "DOWN"
+const StateUnreachable = "UNREACHABLE"
+
+var serviceStateMapNumToName = map[string]string{
 	"0": StateOK,
 	"1": StateWarning,
 	"2": StateCritical,
 	"3": StateUnknown,
 }
 
-var stateMapNameToNum = map[string]string{
+var hostStateMapNumToName = map[string]string{
+	"0": StateUp,
+	"1": StateDown,
+	"2": StateUnreachable,
+}
+
+var hostStateMapNameToNum = map[string]string{
+	StateUp:       "0",
+	StateDown:  "1",
+	StateUnreachable: "2",
+}
+var serviceStateMapNameToNum = map[string]string{
 	StateOK:       "0",
 	StateWarning:  "1",
 	StateCritical: "2",
 	StateUnknown:  "3",
 }
+const isService =  1
+const isHost =  2
 
 // update fields shared by host and service
 type CommonFields struct {
@@ -42,11 +59,20 @@ type CommonFields struct {
 	Downtime            bool      `json:"downtime"`
 }
 
-func (c *CommonFields) UpdateCommonFromMap(m map[string]string) error {
+// update common fields of service/host
+// dataType should be either isService or isHost
+func (c *CommonFields) UpdateCommonFromMap(m map[string]string, dataType int) error {
 	var err error
 	c.Hostname = m["host_name"]
-	c.State = stateMapNumToName[m["current_state"]]
-	c.PreviousState = stateMapNumToName[m["last_hard_state"]]
+	if dataType == isHost {
+		c.State = hostStateMapNumToName[m["current_state"]]
+		c.PreviousState = hostStateMapNumToName[m["last_hard_state"]]
+	} else if dataType == isService {
+		c.State = serviceStateMapNumToName[m["current_state"]]
+		c.PreviousState = serviceStateMapNumToName[m["last_hard_state"]]
+	} else {
+		panic("unkown type passed, pass either isHost or isService const")
+	}
 	c.CheckMessage = m["plugin_output"]
 
 	i, err := strconv.ParseInt(m["last_hard_state_change"], 10, 64)

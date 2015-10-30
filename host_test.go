@@ -53,9 +53,9 @@ func TestHostFromMap(t *testing.T) {
 	Convey("HostFromMap", t, func() {
 		So(err, ShouldEqual, nil)
 		So(tested.Hostname, ShouldEqual, m["host_name"])
-		So(tested.State, ShouldEqual, "WARNING")
+		So(tested.State, ShouldEqual, "DOWN")
 		So(tested.StateHard, ShouldEqual, false)
-		So(tested.PreviousState, ShouldEqual, "OK")
+		So(tested.PreviousState, ShouldEqual, "UP")
 		So(tested.CheckMessage, ShouldEqual, "DUMMY CHECK WARNING")
 		So(tested.LastCheck, ShouldResemble, time.Unix(1444749433, 0))
 		So(tested.NextCheck, ShouldResemble, time.Unix(1444749503, 0))
