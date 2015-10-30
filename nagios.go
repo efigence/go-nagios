@@ -29,8 +29,8 @@ var hostStateMapNumToName = map[string]string{
 }
 
 var hostStateMapNameToNum = map[string]string{
-	StateUp:       "0",
-	StateDown:  "1",
+	StateUp:          "0",
+	StateDown:        "1",
 	StateUnreachable: "2",
 }
 var serviceStateMapNameToNum = map[string]string{
@@ -39,8 +39,9 @@ var serviceStateMapNameToNum = map[string]string{
 	StateCritical: "2",
 	StateUnknown:  "3",
 }
-const isService =  1
-const isHost =  2
+
+const isService = 1
+const isHost = 2
 
 // update fields shared by host and service
 type CommonFields struct {
