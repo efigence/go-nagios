@@ -16,10 +16,10 @@ type HostCount struct {
 
 type ServiceCount struct {
 	All          int `json:"all"`
-	Ok           int `json:"up"`
-	Warning      int `json:"down"`
-	Critical     int `json:"unreachable"`
-	Unknown      int `json:"unreachable"`
+	Ok           int `json:"ok"`
+	Warning      int `json:"warning"`
+	Critical     int `json:"critical"`
+	Unknown      int `json:"unknown"`
 	Downtime     int `json:"downtime"`
 	Acknowledged int `json:"ack"`
 }
