@@ -14,9 +14,9 @@ var blockEndRegex = regexp.MustCompile(`^\s}$`)
 var kvRegex = regexp.MustCompile(`^\s*(\S+?)=(.*)$`)
 
 type Status struct {
-	Host    map[string]Host               `json:"host,omitempty"`
-	Service map[string]map[string]Service `json:"service,omitempty"`
-	Summary Summary                       `json:"summary,omitempty"`
+	Host    map[string]Host               `json:"host"`
+	Service map[string]map[string]Service `json:"service"`
+	Summary Summary                       `json:"summary"`
 	sync.RWMutex
 }
 
