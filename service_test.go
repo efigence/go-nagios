@@ -55,6 +55,7 @@ func TestServiceFromMap(t *testing.T) {
 		"state_type":                    "1",
 		"problem_has_been_acknowledged": "1",
 		"is_flapping":                   "0",
+		"notifications_enabled":         "1",
 		"plugin_output":                 "DUMMY CHECK WARNING",
 	}
 	tested, err := NewServiceFromMap(m)
@@ -70,6 +71,7 @@ func TestServiceFromMap(t *testing.T) {
 		So(tested.LastStateChange, ShouldResemble, time.Unix(1444749403, 0))
 		So(tested.LastHardStateChange, ShouldResemble, time.Unix(1444749354, 0))
 		So(tested.Acknowledged, ShouldEqual, true)
+		So(tested.NotificationsEnabled, ShouldEqual, true)
 		So(tested.Flapping, ShouldEqual, false)
 	})
 

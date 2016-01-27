@@ -45,19 +45,20 @@ const isHost = 2
 
 // update fields shared by host and service
 type CommonFields struct {
-	Hostname            string    `json:"hostname,omitempty"`
-	DisplayName         string    `json:"display_name,omitempty"`
-	CheckMessage        string    `json:"check_message,omitempty"`
-	State               string    `json:"state,omitempty"`
-	PreviousState       string    `json:"previous_state,omitempty"`
-	LastCheck           time.Time `json:"last_check,omitempty"`
-	NextCheck           time.Time `json:"next_check,omitempty"`
-	LastHardStateChange time.Time `json:"last_hard_state_change,omitempty"`
-	LastStateChange     time.Time `json:"last_state_change,omitempty"`
-	StateHard           bool      `json:"state_hard"`
-	Acknowledged        bool      `json:"ack"`
-	Flapping            bool      `json:"flapping"`
-	Downtime            bool      `json:"downtime"`
+	Hostname             string    `json:"hostname,omitempty"`
+	DisplayName          string    `json:"display_name,omitempty"`
+	CheckMessage         string    `json:"check_message,omitempty"`
+	State                string    `json:"state,omitempty"`
+	PreviousState        string    `json:"previous_state,omitempty"`
+	LastCheck            time.Time `json:"last_check,omitempty"`
+	NextCheck            time.Time `json:"next_check,omitempty"`
+	LastHardStateChange  time.Time `json:"last_hard_state_change,omitempty"`
+	LastStateChange      time.Time `json:"last_state_change,omitempty"`
+	StateHard            bool      `json:"state_hard"`
+	Acknowledged         bool      `json:"ack"`
+	Flapping             bool      `json:"flapping"`
+	Downtime             bool      `json:"downtime"`
+	NotificationsEnabled bool      `json:"notifications_enabled"`
 }
 
 // update common fields of service/host
@@ -108,6 +109,16 @@ func (c *CommonFields) UpdateCommonFromMap(m map[string]string, dataType int) er
 		c.StateHard = true
 	} else {
 		c.StateHard = false
+	}
+
+	i, err = strconv.ParseInt(m["notifications_enabled"], 10, 64)
+	if err != nil {
+		return err
+	}
+	if i > 0 {
+		c.NotificationsEnabled = true
+	} else {
+		c.NotificationsEnabled = false
 	}
 
 	i, err = strconv.ParseInt(m["scheduled_downtime_depth"], 10, 64)

@@ -47,6 +47,7 @@ func TestHostFromMap(t *testing.T) {
 		"problem_has_been_acknowledged": "0",
 		"state_type":                    "0",
 		"is_flapping":                   "1",
+		"notifications_enabled":         "0",
 		"plugin_output":                 "DUMMY CHECK WARNING",
 	}
 	tested, err := NewHostFromMap(m)
@@ -62,6 +63,7 @@ func TestHostFromMap(t *testing.T) {
 		So(tested.LastStateChange, ShouldResemble, time.Unix(1444749403, 0))
 		So(tested.LastHardStateChange, ShouldResemble, time.Unix(1444749354, 0))
 		So(tested.Acknowledged, ShouldEqual, false)
+		So(tested.NotificationsEnabled, ShouldEqual, false)
 		So(tested.Flapping, ShouldEqual, true)
 	})
 }
