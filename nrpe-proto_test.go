@@ -5,6 +5,7 @@ import (
 	. "github.com/smartystreets/goconvey/convey"
 	"testing"
 	"bytes"
+	"strings"
 	"fmt"
 )
 
@@ -29,5 +30,10 @@ func TestNRPERequest(t *testing.T) {
 			So(str,ShouldContainSubstring,testStr +"\000")
 		})
 	})
-
+	var p2 NrpePacket
+	err = p2.SetMessage(strings.Repeat("^", 65535))
+	Convey("Create too big packet",t,func() {
+		So(err,ShouldNotBeNil,)
+		So(fmt.Sprintf("%s",err),ShouldContainSubstring,"size exceed")
+	})
 }

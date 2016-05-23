@@ -8,9 +8,11 @@ import (
 	"math/rand"
 	rrand "crypto/rand"
 	"time"
+	"errors"
 )
 
 const NRPE_MAX_PACKETBUFFER_LENGTH = 1024 // this length is hardcoded in nrpe.c
+// this is alphanumeric because original nrpe does the same thing, because they think it is "securer" for some wishy-washy reason
 var nrpeGarbage = []byte(`abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890!@#$%^&*()'"[]{},./<>?`)
 var nrpeGarbageCont = len(nrpeGarbage)
 
@@ -42,10 +44,15 @@ type NrpePacket struct {
 
 //max 1023 BYTES(not characters), it WILL truncate it if you add more
 func (r *NrpePacket)SetMessage(msg string) (err error) {
+	if (len(msg) >= ( NRPE_MAX_PACKETBUFFER_LENGTH-1 ) ) {
+		return errors.New("Max message size exceed")
+	}
 	for i := range r.Buffer {
 		r.Buffer[i] = nrpeGarbage[randomSource.Intn(nrpeGarbageCont)]
     }
 	copy(r.Buffer[:], msg)
+	r.Buffer[len(msg)] = 0
+	// just in case of some horribly broken implementation recieves that packet null last byte
 	r.Buffer[NRPE_MAX_PACKETBUFFER_LENGTH-1] = 0
 	return err
 }
