@@ -53,6 +53,6 @@ func NewCmd(file string) (c *Command, err error) {
 
 // Run any nagios command
 func (cmd *Command) Cmd(command string, params ...string) (err error) {
-	_, err = fmt.Fprintf(cmd.cmdFd, "[%d] %s %+v\n", time.Now().Unix(), command, strings.Join(params, `;`))
+	_, err = fmt.Fprintf(cmd.cmdFd, "[%d] %s;%s\n", time.Now().Unix(), command, strings.Join(params, `;`))
 	return err
 }
