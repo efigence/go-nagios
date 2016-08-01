@@ -9,6 +9,9 @@ import (
 )
 
 // https://old.nagios.org/developerinfo/externalcommands/commandlist.php#_ga=1.116396867.475459535.1470052932
+
+const CmdAcknowledgeHostProblem = "ACKNOWLEDGE_HOST_PROBLEM"
+const CmdAcknowledgeServiceProblem = "ACKNOWLEDGE_SVC_PROBLEM"
 // Schedule downtime and propagate to children
 const CmdScheduleRecursiveDowntime = "SCHEDULE_AND_PROPAGATE_HOST_DOWNTIME"
 
