@@ -2,14 +2,12 @@ package nagios
 
 import (
 	//	"os"
-	. "github.com/smartystreets/goconvey/convey"
-	"testing"
 	"bytes"
-	"strings"
 	"fmt"
+	. "github.com/smartystreets/goconvey/convey"
+	"strings"
+	"testing"
 )
-
-
 
 func TestNRPERequest(t *testing.T) {
 	var p NrpePacket
@@ -22,18 +20,18 @@ func TestNRPERequest(t *testing.T) {
 		fmt.Println("binary.Write failed:", err)
 	}
 	str := fmt.Sprintf("%s", buf.Bytes())
-	Convey (`create packet`,t, func() {
-		Convey("contains msg",func() {
-			So(str,ShouldContainSubstring,testStr)
+	Convey(`create packet`, t, func() {
+		Convey("contains msg", func() {
+			So(str, ShouldContainSubstring, testStr)
 		})
-		Convey("string is nul-terminated",func() {
-			So(str,ShouldContainSubstring,testStr +"\000")
+		Convey("string is nul-terminated", func() {
+			So(str, ShouldContainSubstring, testStr+"\000")
 		})
 	})
 	var p2 NrpePacket
 	err = p2.SetMessage(strings.Repeat("^", 65535))
-	Convey("Create too big packet",t,func() {
-		So(err,ShouldNotBeNil,)
-		So(fmt.Sprintf("%s",err),ShouldContainSubstring,"size exceed")
+	Convey("Create too big packet", t, func() {
+		So(err, ShouldNotBeNil)
+		So(fmt.Sprintf("%s", err), ShouldContainSubstring, "size exceed")
 	})
 }
