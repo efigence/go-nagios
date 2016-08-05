@@ -78,6 +78,19 @@ func (r *NrpePacket) PrepareRequest() (err error) {
 	r.Crc = crc32.ChecksumIEEE(packet)
 	return err
 }
+func (r *NrpePacket) PrepareResponse() (err error) {
+	r.Version = 2
+	r.Type = 2
+	r.Crc = 0
+	packet, err := r.GenerateBytes()
+	if err != nil {
+		return err
+	}
+	r.Crc = crc32.ChecksumIEEE(packet)
+	return err
+}
+
+
 
 func (r *NrpePacket) Generate(w io.Writer) (err error) {
 	err = binary.Write(w, binary.BigEndian, r)
