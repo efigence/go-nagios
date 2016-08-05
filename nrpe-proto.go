@@ -9,9 +9,11 @@ import (
 	"io"
 	"math/rand"
 	"time"
+	"fmt"
 )
 
 const NRPE_MAX_PACKETBUFFER_LENGTH = 1024 // this length is hardcoded in nrpe.c
+const NRPE_PACKET_SIZE = 1036 // struct size + 2 bytes. No idea why, but nrpe C client requires it
 // this is alphanumeric because original nrpe does the same thing, because they think it is "securer" for some wishy-washy reason
 
 // Nrpe packet types
@@ -52,6 +54,7 @@ func (r *NrpePacket) SetMessage(msg string) (err error) {
 	if len(msg) >= (NRPE_MAX_PACKETBUFFER_LENGTH - 1) {
 		return errors.New("Max message size exceed")
 	}
+	// mimic nrpe randomize_buffer
 	for i := range r.Buffer {
 		_ = i
 		r.Buffer[i] = nrpeGarbage[randomSource.Intn(nrpeGarbageCont)]
@@ -63,7 +66,23 @@ func (r *NrpePacket) SetMessage(msg string) (err error) {
 	return err
 }
 
-// mimic nrpe randomize_buffer
+func ReadNrpeBytes(b []byte) (p *NrpePacket, err error) {
+	// we accept bigger packets just in case of some buggy implementation. rest of packet is ignored
+	if len(b) < NRPE_PACKET_SIZE {
+		return &NrpePacket{}, fmt.Errorf("Wrong packet size %d, should be %d",len(b),NRPE_PACKET_SIZE)
+	}
+	r := bytes.NewReader(b)
+	return ReadNrpe(r)
+}
+func ReadNrpe(r io.Reader) (p *NrpePacket, err error) {
+	var nrpe NrpePacket
+	err = binary.Read(r,binary.BigEndian, &nrpe)
+	if (err != nil ) {
+		return &nrpe, err
+	}
+	// TODO checksum test
+	return &nrpe, err
+}
 
 // calculate crc, set version and type
 // Should be called before generating packet
@@ -90,6 +109,12 @@ func (r *NrpePacket) PrepareResponse() (err error) {
 	return err
 }
 
+func (r *NrpePacket) GetMessage() (str string, err error) {
+	b := bytes.NewBuffer(r.Buffer[:])
+	msg, err := b.ReadBytes('\000')
+	msg = bytes.Trim(msg,"\000")
+	return string(msg), err
+}
 
 
 func (r *NrpePacket) Generate(w io.Writer) (err error) {
