@@ -69,7 +69,7 @@ func (r *NrpePacket) SetMessage(msg string) (err error) {
 func ReadNrpeBytes(b []byte) (p *NrpePacket, err error) {
 	// we accept bigger packets just in case of some buggy implementation. rest of packet is ignored
 	if len(b) < NrpePacketSize {
-		return &NrpePacket{}, fmt.Errorf("Wrong packet size %d, should be %d",len(b),NRPE_PACKET_SIZE)
+		return &NrpePacket{}, fmt.Errorf("Wrong packet size %d, should be %d",len(b),NrpePacketSize)
 	}
 	r := bytes.NewReader(b)
 	return ReadNrpe(r)
