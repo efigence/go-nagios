@@ -1,22 +1,19 @@
 package nagios
 
-import(
-	"regexp"
-	"io"
+import (
 	"bufio"
+	"io"
+	"regexp"
 )
-
 
 var nrpeCommandLineRe = regexp.MustCompile(`^\s*command\[(.+?)\]\s*=\s*(.+)\s*`)
 var nrpeConfigLineRe = regexp.MustCompile(`^\s*(\S+)\s*=\s*(.+)$`)
 var stripCommentRe = regexp.MustCompile(`\s*#.*`)
 
-
 type NrpeConfig struct {
-	Config map[string]string
+	Config  map[string]string
 	Command map[string]string
 }
-
 
 func ParseNrpeConfig(data io.Reader) (cfg NrpeConfig, err error) {
 	scan := bufio.NewScanner(data)
@@ -35,5 +32,5 @@ func ParseNrpeConfig(data io.Reader) (cfg NrpeConfig, err error) {
 			continue
 		}
 	}
-	return cfg,err
+	return cfg, err
 }

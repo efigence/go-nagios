@@ -11,35 +11,36 @@ import (
 // https://old.nagios.org/developerinfo/externalcommands/commandlist.php#_ga=1.116396867.475459535.1470052932
 
 const (
-	CmdAcknowledgeHostProblem = "ACKNOWLEDGE_HOST_PROBLEM"
+	CmdAcknowledgeHostProblem    = "ACKNOWLEDGE_HOST_PROBLEM"
 	CmdAcknowledgeServiceProblem = "ACKNOWLEDGE_SVC_PROBLEM"
 	// Schedule downtime and propagate to children
 	CmdScheduleRecursiveDowntime = "SCHEDULE_AND_PROPAGATE_HOST_DOWNTIME"
 
 	// Schedule downtime and propagate to childrenon trigger
 	CmdScheduleRecursiveTriggeredDowntime = "SCHEDULE_AND_PROPAGATE_TRIGGERED_HOST_DOWNTIME"
-	CmdScheduleForcedHostCheck = "SCHEDULE_FORCED_HOST_CHECK"
-	CmdScheduleForcedServiceCheckAll = "SCHEDULE_FORCED_HOST_SVC_CHECKS"
-	CmdScheduleForcedServiceCheck = "SCHEDULE_FORCED_SVC_CHECK"
+	CmdScheduleForcedHostCheck            = "SCHEDULE_FORCED_HOST_CHECK"
+	CmdScheduleForcedServiceCheckAll      = "SCHEDULE_FORCED_HOST_SVC_CHECKS"
+	CmdScheduleForcedServiceCheck         = "SCHEDULE_FORCED_SVC_CHECK"
 
 	// Schedule downtime of all hosts in hostgroup
 	CmdScheduleHostgroupHostsDowntime = "SCHEDULE_HOSTGROUP_HOST_DOWNTIME"
 
 	// Schedule downtime of all services on hosts in hostgroup
 	CmdScheduleHostgroupServiceDowntime = "SCHEDULE_HOSTGROUP_SVC_DOWNTIME"
-	CmdScheduleHostCheck = "SCHEDULE_HOST_CHECK"
-	CmdScheduleHostDowntime = "SCHEDULE_HOST_DOWNTIME"
-	CmdScheduleHostServiceCheckAll = "SCHEDULE_HOST_SVC_CHECKS"
-	CmdScheduleHostServiceDowntimeAll = "SCHEDULE_HOST_SVC_DOWNTIME"
+	CmdScheduleHostCheck                = "SCHEDULE_HOST_CHECK"
+	CmdScheduleHostDowntime             = "SCHEDULE_HOST_DOWNTIME"
+	CmdScheduleHostServiceCheckAll      = "SCHEDULE_HOST_SVC_CHECKS"
+	CmdScheduleHostServiceDowntimeAll   = "SCHEDULE_HOST_SVC_DOWNTIME"
 
 	// schedule downtime for all hosts that have service in servicegroup
 	CmdScheduleServicegroupHostDowntime = "SCHEDULE_SERVICEGROUP_HOST_DOWNTIME"
 
 	// schedule downtime for all services in the servicegroup
 	CmdScheduleServicegroupServiceDowntime = "SCHEDULE_SERVICEGROUP_SVC_DOWNTIME"
-	CmdScheduleServiceCheck = "SCHEDULE_SVC_CHECK"
-	CmdScheduleServiceDowntime = "SCHEDULE_SVC_DOWNTIME"
+	CmdScheduleServiceCheck                = "SCHEDULE_SVC_CHECK"
+	CmdScheduleServiceDowntime             = "SCHEDULE_SVC_DOWNTIME"
 )
+
 type Command struct {
 	Filename string
 	cmdFd    io.Writer

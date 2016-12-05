@@ -3,10 +3,9 @@ package nagios
 import (
 	//	"os"
 	"fmt"
-	"net"
 	"github.com/efigence/go-nagios"
+	"net"
 )
-
 
 func ExampleNrpePacket() {
 	sock, _ := net.Listen("tcp", ":5666")
@@ -24,6 +23,6 @@ func ExampleNrpePacket() {
 			// and close
 			conn.Close()
 
-		} (conn)
+		}(conn)
 	}
 }

@@ -5,22 +5,23 @@ import (
 	rrand "crypto/rand"
 	"encoding/binary"
 	"errors"
+	"fmt"
 	"hash/crc32"
 	"io"
 	"math/rand"
 	"time"
-	"fmt"
 )
 
 const NRPE_MAX_PACKETBUFFER_LENGTH = 1024 // this length is hardcoded in nrpe.c
-const NrpePacketSize = 1036 // struct size + 2 bytes. No idea why, but nrpe C client requires it
+const NrpePacketSize = 1036               // struct size + 2 bytes. No idea why, but nrpe C client requires it
 // this is alphanumeric because original nrpe does the same thing, because they think it is "securer" for some wishy-washy reason
 
 // Nrpe packet types
 const (
-	NrpeTypeQuery = 1
+	NrpeTypeQuery    = 1
 	NrpeTypeResponse = 2
 )
+
 var nrpeGarbage = []byte(`abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890!@#$%^&*()'"[]{},./<>?`)
 var nrpeGarbageCont = len(nrpeGarbage)
 
@@ -69,15 +70,15 @@ func (r *NrpePacket) SetMessage(msg string) (err error) {
 func ReadNrpeBytes(b []byte) (p *NrpePacket, err error) {
 	// we accept bigger packets just in case of some buggy implementation. rest of packet is ignored
 	if len(b) < NrpePacketSize {
-		return &NrpePacket{}, fmt.Errorf("Wrong packet size %d, should be %d",len(b),NrpePacketSize)
+		return &NrpePacket{}, fmt.Errorf("Wrong packet size %d, should be %d", len(b), NrpePacketSize)
 	}
 	r := bytes.NewReader(b)
 	return ReadNrpe(r)
 }
 func ReadNrpe(r io.Reader) (p *NrpePacket, err error) {
 	var nrpe NrpePacket
-	err = binary.Read(r,binary.BigEndian, &nrpe)
-	if (err != nil ) {
+	err = binary.Read(r, binary.BigEndian, &nrpe)
+	if err != nil {
 		return &nrpe, err
 	}
 	// TODO checksum test
@@ -112,10 +113,9 @@ func (r *NrpePacket) PrepareResponse() (err error) {
 func (r *NrpePacket) GetMessage() (str string, err error) {
 	b := bytes.NewBuffer(r.Buffer[:])
 	msg, err := b.ReadBytes('\000')
-	msg = bytes.Trim(msg,"\000")
+	msg = bytes.Trim(msg, "\000")
 	return string(msg), err
 }
-
 
 func (r *NrpePacket) Generate(w io.Writer) (err error) {
 	err = binary.Write(w, binary.BigEndian, r)

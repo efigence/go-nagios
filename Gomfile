@@ -1,1 +1,2 @@
 gom 'github.com/smartystreets/goconvey/convey'
+gom 'github.com/efigence/go-nagios'
