@@ -29,15 +29,6 @@ else
     exit 1
 fi
 
-
-echo "=== installing deps"
-if $(which gom >/dev/null 2>&1)  ; then
-    echo "=== Gom installed"
-else
-    echo "=== Installing Gom"
-    go get github.com/mattn/gom
-fi
-
 if $(which go-junit-report >/dev/null 2>&1) ;then
     echo "=== go-junit-report installed"
 else
@@ -57,18 +48,18 @@ else
     go get github.com/AlekSi/gocov-xml
 fi
 
+go get github.com/smartystreets/goconvey/convey
+echo   mkdir -p "$GOPATH/src/github.com/efigence"
+echo ln -s "`pwd`" "$GOPATH/github.com/efigence/go-nagios"
 
 echo "=== building package version" $(make version)
 make
 echo "=== running tests"
-if [ -e Gomfile ] ; then
-    gom exec go test -v -coverprofile=cover.out | go-junit-report > report.xml
-else
     go test -v -coverprofile=cover.out | go-junit-report > report.xml
-fi
 # cleanup resulting file, else any coverage tool fails with can't find "cmd.go": cannot find package "_/repo/path"
 sed -i -e "s#.*/\(.*\.go\)#\./\\1#" cover.out
 
 echo "Generating cover-cobertura.xml"
 gocov convert cover.out  >cover.json
 cat cover.json |gocov-xml >cover-cobertura.xml
+
