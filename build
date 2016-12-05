@@ -49,8 +49,8 @@ else
 fi
 
 go get github.com/smartystreets/goconvey/convey
-echo   mkdir -p "$GOPATH/src/github.com/efigence"
-echo ln -s "`pwd`" "$GOPATH/github.com/efigence/go-nagios"
+mkdir -p "$GOPATH/src/github.com/efigence"
+ln -s "`pwd`" "$GOPATH/src/github.com/efigence/go-nagios"
 
 echo "=== building package version" $(make version)
 make
@@ -62,4 +62,3 @@ sed -i -e "s#.*/\(.*\.go\)#\./\\1#" cover.out
 echo "Generating cover-cobertura.xml"
 gocov convert cover.out  >cover.json
 cat cover.json |gocov-xml >cover-cobertura.xml
-
