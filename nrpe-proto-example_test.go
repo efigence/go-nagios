@@ -3,7 +3,6 @@ package nagios
 import (
 	//	"os"
 	"fmt"
-	"github.com/efigence/go-nagios"
 	"net"
 )
 
@@ -12,10 +11,10 @@ func ExampleNrpePacket() {
 	for {
 		conn, _ := sock.Accept()
 		go func(conn net.Conn) {
-			req, _ := nagios.ReadNrpe(conn)
+			req, _ := ReadNrpe(conn)
 			msg, _ := req.GetMessage()
 			fmt.Printf("request: %s\n", msg)
-			var resp nagios.NrpePacket
+			var resp NrpePacket
 			resp.SetMessage("OK")
 			resp.PrepareResponse()
 			// send response
