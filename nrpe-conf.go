@@ -14,7 +14,7 @@ type NrpeConfig struct {
 	Config  map[string]string
 	Command map[string]string
 }
-
+// Limitations: only key-value config so you can have config with only one include and only one include_dir
 func ParseNrpeConfig(data io.Reader) (cfg NrpeConfig, err error) {
 	scan := bufio.NewScanner(data)
 	cfg.Config = make(map[string]string)
