@@ -39,6 +39,10 @@ const (
 	CmdScheduleServicegroupServiceDowntime = "SCHEDULE_SERVICEGROUP_SVC_DOWNTIME"
 	CmdScheduleServiceCheck                = "SCHEDULE_SVC_CHECK"
 	CmdScheduleServiceDowntime             = "SCHEDULE_SVC_DOWNTIME"
+
+	// Process passive checks
+	CmdProcessHostCheckResult    = "PROCESS_HOST_CHECK_RESULT"
+	CmdProcessServiceCheckResult = "PROCESS_SERVICE_CHECK_RESULT"
 )
 
 type Command struct {
@@ -46,15 +50,20 @@ type Command struct {
 	cmdFd    io.Writer
 }
 
-// Create command interface to a given command file. It should already exist (FIFO created by nagios)
+// NewCmd() creats command interface to a given command file. It should already exist (FIFO created by nagios)
 func NewCmd(file string) (c *Command, err error) {
 	var cmd Command
 	cmd.cmdFd, err = os.OpenFile(file, os.O_APPEND|os.O_WRONLY, 0644)
 	return &cmd, err
 }
 
-// Run any nagios command
+
 func (cmd *Command) Cmd(command string, params ...string) (err error) {
+	_, err = fmt.Fprintf(cmd.cmdFd, "[%d] %s;%s\n", time.Now().Unix(), command, strings.Join(params, `;`))
+	return err
+}
+
+func (cmd *Command) Send(command string, params ...string) (err error) {
 	_, err = fmt.Fprintf(cmd.cmdFd, "[%d] %s;%s\n", time.Now().Unix(), command, strings.Join(params, `;`))
 	return err
 }

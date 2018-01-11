@@ -1,17 +1,19 @@
 
 
-# editor temp files
+# editor crap
 *~
 .*.sw?
 .sw?
 .\#*
 \#*\#
 DEADJOE
-TAGS
-tags
+.idea/*
 # compiled files
 _vendor/
+vendor/
 *\.test
+tags
+TAGS
 
 # Compiled Object files, Static and Dynamic libs (Shared Objects)
 *.o
@@ -23,6 +25,8 @@ _vendor/
 cover-cobertura.xml
 cover.json
 report.xml
+.env.sh
+t-data/nagios.cmd
 
 # Architecture specific extensions/prefixes
 *.[568vq]
@@ -40,8 +44,13 @@ _testmain.go
 *.test
 *.prof
 *.out
+*.static
+main
+*.arm
+*.arm64
+*.386
+
 
 # local test data
 
 t-data/*local
-t-data/nagios.cmd
