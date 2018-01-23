@@ -5,9 +5,10 @@ import (
 	"os"
 	"testing"
 	"time"
+	"fmt"
 )
 
-func TestService(t *testing.T) {
+func TestServiceFromEnv(t *testing.T) {
 	basicEnv()
 	service, err := NewServiceFromEnv()
 	if err != nil {
@@ -17,6 +18,23 @@ func TestService(t *testing.T) {
 	if service.Hostname == "" {
 		t.Error("Empty host")
 	}
+	Convey("ServiceFromEnv", t, func() {
+		So(service.Hostname, ShouldEqual, "testhost")
+		So(service.Description, ShouldEqual, "test-service")
+		So(service.State, ShouldEqual, "CRITICAL")
+		So(service.StateHard, ShouldEqual, true)
+	})
+
+}
+
+func TestServiceMarshal(t *testing.T) {
+	basicEnv()
+	service, err := NewServiceFromEnv()
+	fmt.Printf("%+v", service)
+	Convey("ServiceMarshal", t, func() {
+		So(err,ShouldBeNil)
+		So(service.MarshalCmd(), ShouldEqual, "testhost;test-service;2;DUMMY CHECK CRITICAL")
+	})
 }
 
 func TestServiceNoDesc(t *testing.T) {

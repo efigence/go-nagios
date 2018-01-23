@@ -2,6 +2,7 @@ package nagios
 
 import (
 	"strconv"
+	"sync"
 	"time"
 	//	"os"
 )
@@ -45,6 +46,7 @@ const isHost = 2
 
 // update fields shared by host and service
 type CommonFields struct {
+	sync.RWMutex
 	Hostname             string    `json:"hostname,omitempty"`
 	DisplayName          string    `json:"display_name,omitempty"`
 	CheckMessage         string    `json:"check_message,omitempty"`
@@ -154,4 +156,14 @@ func (c *CommonFields) UpdateCommonFromMap(m map[string]string, dataType int) er
 	}
 
 	return err
+}
+func (c *CommonFields) UpdateStatus(status string, message string) {
+	t := time.Now()
+	c.Lock()
+	defer c.Unlock()
+	c.CheckMessage = message
+	c.PreviousState = c.State
+	c.State = status
+	c.LastStateChange = t
+	c.LastCheck = t
 }

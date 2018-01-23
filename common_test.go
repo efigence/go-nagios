@@ -18,6 +18,7 @@ func basicEnv() {
 	os.Setenv("NAGIOS_SERVICEISVOLATILE", "0")
 	os.Setenv("NAGIOS_SERVICEDURATION", "0d 0h 5m 0s")
 	os.Setenv("NAGIOS_SERVICEDURATIONSEC", "300")
+	os.Setenv("NAGIOS_SERVICEOUTPUT", "DUMMY CHECK CRITICAL")
 
 }
 

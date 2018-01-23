@@ -41,3 +41,25 @@ func NewHostFromMap(m map[string]string) (Host, error) {
 	h.UpdateCommonFromMap(m, isHost)
 	return h, err
 }
+// NewHostFromArgs creates host from nagios cmd args slice
+func NewHostFromArgs(args []string) (Host, error) {
+	var h Host
+	h.Hostname = args[0]
+	if val, ok := hostStateMapNumToName[args[1]]; ok {
+		h.State = val
+	} else {
+		h.State = StateUnknown
+	}
+	h.CheckMessage = args[2]
+	return h,nil
+}
+// MarshalCmd marshals host data in nagios cmd-compatible format (';'-separated fields)
+// it is mainly designed to be used with Command.Send, like this:
+//
+//       cmd.Send(nagios.CmdProcessServiceCheckResult,service.MarshalCmd())
+
+func (h *Host)MarshalCmd() string{
+	h.RLock()
+	defer h.RUnlock()
+	return EncodeHostCheck(*h)
+}

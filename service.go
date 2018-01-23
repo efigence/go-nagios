@@ -29,6 +29,11 @@ func NewServiceFromEnv() (Service, error) {
 	s.Hostname = os.Getenv("NAGIOS_HOSTNAME")
 	s.Description = os.Getenv("NAGIOS_SERVICEDESC")
 	s.DisplayName = os.Getenv("NAGIOS_SERVICEDISPLAYNAME")
+	s.State = os.Getenv("NAGIOS_SERVICESTATE")
+	if os.Getenv("NAGIOS_SERVICESTATETYPE") == "HARD" {
+		s.StateHard = true
+	}
+	s.CheckMessage = os.Getenv("NAGIOS_SERVICEOUTPUT")
 	if os.Getenv("NAGIOS_SERVICEISVOLATILE") == "1" {
 		s.Volatile = true
 	} else {
@@ -59,4 +64,28 @@ func NewServiceFromMap(m map[string]string) (Service, error) {
 	}
 	s.Description = m["service_description"]
 	return s, err
+}
+
+func NewServiceFromArgs(args []string) (Service, error) {
+	var s Service
+	s.Hostname = args[0]
+	s.Description = args[1]
+	if val, ok := serviceStateMapNumToName[args[2]]; ok {
+		s.State = val
+	} else {
+		s.State = StateUnknown
+	}
+	s.CheckMessage = args[3]
+	return s, nil
+}
+
+// MarshalCmd marshals service data in nagios cmd-compatible format (';'-separated fields)
+// it is mainly designed to be used with Command.Send, like this:
+//
+//       cmd.Send(nagios.CmdProcessServiceCheckResult,service.MarshalCmd())
+
+func (s *Service)MarshalCmd() string{
+	s.RLock()
+	defer s.RUnlock()
+	return EncodeServiceCheck(*s)
 }

@@ -34,6 +34,7 @@ func TestHostFromEnv(t *testing.T) {
 	}
 }
 
+
 func TestHostFromMap(t *testing.T) {
 	m := map[string]string{
 		"host_name":                     "testhost",

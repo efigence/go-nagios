@@ -23,28 +23,20 @@ func DecodeNagiosCmd(cmd string) (name string, args []string, err error) {
 // Decode host check string
 func DecodeHostCheck(check string) (Host, error) {
 	var parts []string
-	var h Host
 	if cmd, args, err := DecodeNagiosCmd(check); err == nil && cmd == CmdProcessHostCheckResult {
 		if len(args) < 3 {
-			return h, fmt.Errorf("Decode error, not enough parts after splitting [%s]", check)
+			return Host{}, fmt.Errorf("Decode error, not enough parts after splitting [%s]", check)
 		}
 		parts = args
 	} else if err == nil {
-		return h, fmt.Errorf("Expected host check, got [%s]",cmd)
+		return Host{}, fmt.Errorf("Expected host check, got [%s]",cmd)
 	} else {
 		parts = strings.SplitN(check, ";", 3)
 		if len(parts) < 3 {
-			return h, fmt.Errorf("Decode error, not enough parts after splitting [%s]", check)
+			return Host{}, fmt.Errorf("Decode error, not enough parts after splitting [%s]", check)
 		}
 	}
-	h.Hostname = parts[0]
-	if val, ok := hostStateMapNumToName[parts[1]]; ok {
-		h.State = val
-	} else {
-		h.State = StateUnknown
-	}
-	h.CheckMessage = parts[2]
-	return h, nil
+	return NewHostFromArgs(parts)
 }
 
 // Encode host status into host check string (without PASSIVE_HOST_CHECK_RESULT header)
@@ -59,31 +51,21 @@ func EncodeHostCheck(h Host) string {
 
 
 func DecodeServiceCheck(check string) (Service, error) {
-	var s Service
 	var parts []string
 	if cmd, args, err := DecodeNagiosCmd(check); err == nil && cmd == CmdProcessHostCheckResult {
 		if len(args) < 4 {
-			return s, fmt.Errorf("Decode error, not enough parts after splitting [%s]", check)
+			return Service{}, fmt.Errorf("Decode error, not enough parts after splitting [%s]", check)
 		}
 		parts = args
 	} else if err == nil {
-		return s, fmt.Errorf("Expected host check, got [%s]",cmd)
+		return Service{}, fmt.Errorf("Expected host check, got [%s]",cmd)
 	} else {
 		parts = strings.SplitN(check, ";", 4)
 		if len(parts) < 4 {
-			return s, fmt.Errorf("Decode error, not enough parts after splitting [%s]", check)
+			return Service{}, fmt.Errorf("Decode error, not enough parts after splitting [%s]", check)
 		}
 	}
-	s.Hostname = parts[0]
-	s.Description = parts[1]
-	if val, ok := serviceStateMapNumToName[parts[2]]; ok {
-		s.State = val
-	} else {
-		s.State = StateUnknown
-	}
-	s.CheckMessage = parts[3]
-	return s, nil
-
+	return NewServiceFromArgs(parts)
 }
 
 func EncodeServiceCheck(s Service) string {
