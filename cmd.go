@@ -2,7 +2,6 @@ package nagios
 
 import (
 	"fmt"
-	"io"
 	"os"
 	"strings"
 	"time"
@@ -47,7 +46,7 @@ const (
 
 type Command struct {
 	Filename string
-	cmdFd    io.Writer
+	cmdFd    *os.File
 }
 
 // NewCmd() creats command interface to a given command file. It should already exist (FIFO created by nagios)
@@ -57,7 +56,6 @@ func NewCmd(file string) (c *Command, err error) {
 	return &cmd, err
 }
 
-
 func (cmd *Command) Cmd(command string, params ...string) (err error) {
 	_, err = fmt.Fprintf(cmd.cmdFd, "[%d] %s;%s\n", time.Now().Unix(), command, strings.Join(params, `;`))
 	return err
@@ -66,4 +64,8 @@ func (cmd *Command) Cmd(command string, params ...string) (err error) {
 func (cmd *Command) Send(command string, params ...string) (err error) {
 	_, err = fmt.Fprintf(cmd.cmdFd, "[%d] %s;%s\n", time.Now().Unix(), command, strings.Join(params, `;`))
 	return err
+}
+
+func (cmd *Command) Close() {
+	cmd.cmdFd.Close()
 }

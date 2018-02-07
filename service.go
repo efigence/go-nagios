@@ -7,6 +7,7 @@ import (
 	//	"strconv"
 	"strings"
 	//	"time"
+	"fmt"
 )
 
 type Service struct {
@@ -68,6 +69,9 @@ func NewServiceFromMap(m map[string]string) (Service, error) {
 
 func NewServiceFromArgs(args []string) (Service, error) {
 	var s Service
+	if len(args) < 4 {
+		return s, fmt.Errorf("too little arguments, should have host, service, state, check message")
+	}
 	s.Hostname = args[0]
 	s.Description = args[1]
 	if val, ok := serviceStateMapNumToName[args[2]]; ok {

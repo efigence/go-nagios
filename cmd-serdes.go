@@ -52,13 +52,13 @@ func EncodeHostCheck(h Host) string {
 
 func DecodeServiceCheck(check string) (Service, error) {
 	var parts []string
-	if cmd, args, err := DecodeNagiosCmd(check); err == nil && cmd == CmdProcessHostCheckResult {
+	if cmd, args, err := DecodeNagiosCmd(check); err == nil && cmd == CmdProcessServiceCheckResult {
 		if len(args) < 4 {
 			return Service{}, fmt.Errorf("Decode error, not enough parts after splitting [%s]", check)
 		}
 		parts = args
 	} else if err == nil {
-		return Service{}, fmt.Errorf("Expected host check, got [%s]",cmd)
+		return Service{}, fmt.Errorf("Expected service check, got [%s]",cmd)
 	} else {
 		parts = strings.SplitN(check, ";", 4)
 		if len(parts) < 4 {

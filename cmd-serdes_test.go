@@ -17,6 +17,13 @@ func TestHostEncode(t *testing.T) {
 	})
 }
 
+func TestCmdDecode(t *testing.T) {
+	_ , _ , err := DecodeNagiosCmd("some garbage")
+	Convey("No separators",t,func() {
+		So(err,ShouldNotBeNil)
+	})
+}
+
 func TestHostDecode(t *testing.T) {
 	h := CmdProcessHostCheckResult + ";testhost2;1;bad"
 	host,err := DecodeHostCheck(h)
@@ -41,6 +48,17 @@ func TestHostDecode(t *testing.T) {
 		So(host.CheckMessage, ShouldEqual, "unk")
 		So(host.State, ShouldEqual, StateUnreachable)
 	})
+	// bad data test
+	h = "PROCESS_HOST_CHECK_RESULT;testhost3 - some - bad - data"
+	_,err = DecodeHostCheck(h)
+	Convey("TestHostDecode - bad data", t, func() {
+		So(err, ShouldNotBeNil)
+	})
+	h = "PROCESS_SVC_CHECK_RESULT;testhost3;some;other;data"
+	_,err = DecodeHostCheck(h)
+	Convey("TestHostDecode - bad data", t, func() {
+		So(err, ShouldNotBeNil)
+	})
 }
 
 func TestServiceEncode(t *testing.T) {
@@ -60,7 +78,7 @@ func TestServiceEncode(t *testing.T) {
 }
 
 func TestServiceDecode(t *testing.T) {
-	service, err := DecodeServiceCheck(CmdProcessHostCheckResult + ";testhost2;testservice2;2;bad")
+	service, err := DecodeServiceCheck(CmdProcessServiceCheckResult + ";testhost2;testservice2;2;bad")
 	Convey("TestServiceDecode - service critical", t, func() {
 		So(err, ShouldBeNil)
 		So(service.Hostname, ShouldEqual, "testhost2")
@@ -68,10 +86,7 @@ func TestServiceDecode(t *testing.T) {
 		So(service.CheckMessage, ShouldEqual, "bad")
 		So(service.State, ShouldEqual, StateCritical)
 	})
-	service,err = DecodeServiceCheck("testhost2;testserv;1")
-	Convey("TestServiceDecode - bad data", t, func() {
-		So(err, ShouldNotBeNil)
-	})
+
 	service, err = DecodeServiceCheck("testhost3;testservice3;0;kk")
 	Convey("TestServiceDecode - service ok", t, func() {
 		So(err, ShouldBeNil)
@@ -79,5 +94,17 @@ func TestServiceDecode(t *testing.T) {
 		So(service.Description, ShouldEqual, "testservice3")
 		So(service.CheckMessage, ShouldEqual, "kk")
 		So(service.State, ShouldEqual, StateOk)
+	})
+	service,err = DecodeServiceCheck("testhost2;testserv;1")
+	Convey("TestServiceDecode - bad data - not enough parts(no cmd)", t, func() {
+		So(err, ShouldNotBeNil)
+	})
+	service,err = DecodeServiceCheck(CmdProcessServiceCheckResult + ";testhost2;testserv;1")
+	Convey("TestServiceDecode - bad data - not enough parts(with cmd)", t, func() {
+		So(err, ShouldNotBeNil)
+	})
+	service,err = DecodeServiceCheck(CmdProcessHostCheckResult + ";testhost2;testserv;1")
+	Convey("TestServiceDecode - bad data - wrong cmd", t, func() {
+		So(err, ShouldNotBeNil)
 	})
 }

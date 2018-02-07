@@ -69,6 +69,25 @@ func TestHostFromMap(t *testing.T) {
 	})
 }
 
+func TestHostMarshalCmd(t *testing.T) {
+
+	tested, err := NewHostFromArgs([]string{"testhost1","2","DUMMY CHECK WARNING"})
+	Convey("HostFromArgs", t, func() {
+		So(err, ShouldBeNil)
+		So(tested.MarshalCmd(), ShouldEqual, "testhost1;2;DUMMY CHECK WARNING")
+	})
+
+
+	_, err = NewHostFromArgs([]string{"testhost1","666","DUMMY CHECK WARNING"})
+	Convey("HostFromArgs", t, func() {
+		So(err, ShouldNotBeNil)
+	})
+
+}
+
+//func TestBadHostDatat(*testing.T) {
+
+
 func BenchmarkHostFromEnv(b *testing.B) {
 	basicEnv()
 	b.ResetTimer()

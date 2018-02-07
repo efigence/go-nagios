@@ -5,6 +5,7 @@ import (
 	"errors"
 	"os"
 	"strings"
+	"fmt"
 )
 
 type Host struct {
@@ -48,7 +49,7 @@ func NewHostFromArgs(args []string) (Host, error) {
 	if val, ok := hostStateMapNumToName[args[1]]; ok {
 		h.State = val
 	} else {
-		h.State = StateUnknown
+		return h, fmt.Errorf("invalid host state [%s]", args[1])
 	}
 	h.CheckMessage = args[2]
 	return h,nil
