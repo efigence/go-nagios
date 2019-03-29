@@ -1,0 +1,38 @@
+# Golang CircleCI 2.0 configuration file
+#
+
+# Check https://circleci.com/docs/2.0/language-go/ for more details
+version: 2
+jobs:
+  build:
+    docker:
+      # specify the version
+      - image: circleci/golang:1.9
+        environment:
+          TEST_RESULTS=/tmp/test-results
+      # Specify service dependencies here if necessary
+      # CircleCI maintains a library of pre-built images
+      # documented at https://circleci.com/docs/2.0/circleci-images/
+      # - image: circleci/postgres:9.4
+
+    #### TEMPLATE_NOTE: go expects specific checkout path representing url
+    #### expecting it in the form of
+    ####   /go/src/github.com/circleci/go-tool
+    ####   /go/src/bitbucket.org/circleci/go-tool
+    working_directory: /go/src/github.com/efigence/go-nagio
+    steps:
+      - checkout
+      - run: mkdir -p $TEST_RESULTS
+      - restore_cache:
+          keys:
+            - v1-pkg-cache
+            # specify any bash command here prefixed with `run: `
+      - run: go get github.com/jstemmer/go-junit-report
+      - run: go get -v -t -d ./...
+      - run: go test -v ./...
+      - run:
+          name: Run tests
+          command: |
+              go test -v -bench . -count 5 |go-junit-report > ${TEST_RESULTS}/go-test-report.xml
+      - store_test_results:
+          path: /tmp/test-results
