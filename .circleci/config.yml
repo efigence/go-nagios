@@ -19,7 +19,7 @@ jobs:
     #### expecting it in the form of
     ####   /go/src/github.com/circleci/go-tool
     ####   /go/src/bitbucket.org/circleci/go-tool
-    working_directory: /go/src/github.com/efigence/go-nagio
+    working_directory: /go/src/github.com/efigence/go-nagios
     steps:
       - checkout
       - run: mkdir -p $TEST_RESULTS
