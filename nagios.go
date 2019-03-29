@@ -1,6 +1,7 @@
 package nagios
 
 import (
+	"fmt"
 	"strconv"
 	"sync"
 	"time"
@@ -79,31 +80,31 @@ func (c *CommonFields) UpdateCommonFromMap(m map[string]string, dataType int) er
 	}
 	c.CheckMessage = m["plugin_output"]
 
-	i, err := strconv.ParseInt(m["last_hard_state_change"], 10, 64)
+	i, err := parseIntInMap(m, "last_hard_state_change")
 	if err != nil {
 		return err
 	}
 	c.LastHardStateChange = time.Unix(i, 0)
 
-	i, err = strconv.ParseInt(m["last_state_change"], 10, 64)
+	i, err = parseIntInMap(m, "last_state_change")
 	if err != nil {
 		return err
 	}
 	c.LastStateChange = time.Unix(i, 0)
 
-	i, err = strconv.ParseInt(m["last_check"], 10, 64)
+	i, err = parseIntInMap(m, "last_check")
 	if err != nil {
 		return err
 	}
 	c.LastCheck = time.Unix(i, 0)
 
-	i, err = strconv.ParseInt(m["next_check"], 10, 64)
+	i, err = parseIntInMap(m, "next_check")
 	if err != nil {
 		return err
 	}
 	c.NextCheck = time.Unix(i, 0)
 
-	i, err = strconv.ParseInt(m["state_type"], 10, 64)
+	i, err = parseIntInMap(m, "state_type")
 	if err != nil {
 		return err
 	}
@@ -113,9 +114,9 @@ func (c *CommonFields) UpdateCommonFromMap(m map[string]string, dataType int) er
 		c.StateHard = false
 	}
 
-	i, err = strconv.ParseInt(m["notifications_enabled"], 10, 64)
+	i, err = parseIntInMap(m, "notifications_enabled")
 	if err != nil {
-		return err
+		return fmt.Errorf("error converting state_type, %s",err)
 	}
 	if i > 0 {
 		c.NotificationsEnabled = true
@@ -156,6 +157,15 @@ func (c *CommonFields) UpdateCommonFromMap(m map[string]string, dataType int) er
 	}
 
 	return err
+}
+// parse int from map and add needed error info
+func parseIntInMap(m map[string]string, key string) (int64,error) {
+	i, err := strconv.ParseInt(m[key], 10, 64)
+	if err != nil {
+		return i, fmt.Errorf("error converting %s, %s", key, err)
+	} else {
+		return i, nil
+	}
 }
 func (c *CommonFields) UpdateStatus(status string, message string) {
 	t := time.Now()

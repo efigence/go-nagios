@@ -34,15 +34,22 @@ func TestNagios(t *testing.T) {
 		"problem_has_been_acknowledged",
 		"is_flapping",
 	}
-
+	bad := make(map[string]string,len(number_fields))
+	good := make(map[string]string,len(number_fields))
 	for _,fieldname := range number_fields {
-		err = service.UpdateCommonFromMap(map[string]string{fieldname: "not a number"}, isService)
+		good[fieldname] = "1"
+		bad[fieldname] = "1"
+	}
+	err = service.UpdateCommonFromMap(good, isService)
+	Convey("all good number s", t, func() {
+		So(err, ShouldBeNil)
+	})
+	for _,fieldname := range number_fields {
+		bad[fieldname] = "not a number"
+		err = service.UpdateCommonFromMap(map[string]string{fieldname: "1"}, isService)
 		Convey(fieldname + " bad number", t, func() {
 			So(err, ShouldNotBeNil)
 		})
-		err = service.UpdateCommonFromMap(map[string]string{fieldname: "1"}, isService)
-		Convey(fieldname + " good number", t, func() {
-			So(err, ShouldBeNil)
-		})
+		bad[fieldname] = "1"
 	}
 }
