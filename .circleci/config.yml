@@ -33,6 +33,7 @@ jobs:
       - run:
           name: Run tests
           command: |
-              go test -v -bench . -count 5 |go-junit-report > ${TEST_RESULTS}/go-test-report.xml
+              go test -v -bench . -count 5 |tee /tmp/report
+              cat /tmp/report|go-junit-report | tee ${TEST_RESULTS}/go-test-report.xml
       - store_test_results:
           path: /tmp/test-results
