@@ -34,9 +34,9 @@ func TestStatus(t *testing.T) {
 }
 
 func BenchmarkStatus(b *testing.B) {
-	file, err := os.Open("test/status.local.dat")
+	file, err := os.Open("t-data/status.local.dat")
 	if err != nil {
-		file, err = os.Open("test/status.dat")
+		file, err = os.Open("t-data/status.dat")
 		if err != nil {
 			b.Logf("%s", err)
 			b.FailNow()
